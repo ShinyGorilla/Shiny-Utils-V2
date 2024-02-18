@@ -1,7 +1,7 @@
 # Shiny Utils V2
 A Gorilla Tag mod full of a BUNCH of *utilities*
 
-Requires Unity Explorer **DO NOT USE TO CHEAT PLEASE FOR THE LOVE OF GOD**
+Requires [Unity Explorer](https://github.com/sinai-dev/UnityExplorer) **DO NOT USE TO CHEAT PLEASE FOR THE LOVE OF GOD**
 
 ## Features
 * A GUI in the top left corner of your desktop screen, has tabs such as code joiner, portable leaderboard, and more
