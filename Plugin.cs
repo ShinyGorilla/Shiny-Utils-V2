@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using GorillaFriends;
 using GorillaNetworking;
 using MonkeNotificationLib;
@@ -16,6 +16,7 @@ namespace Shiny_Utils_V2
 {
     [BepInPlugin(PluginInfo.GUID, PluginInfo.Name, PluginInfo.Version)]
     [BepInDependency("com.sinai.unityexplorer")]
+    [BepInDependency("crafterbot.notificationlib")]
     public class Plugin : BaseUnityPlugin
     {
         private void Start()
