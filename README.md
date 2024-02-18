@@ -9,3 +9,5 @@ Requires [Unity Explorer](https://github.com/sinai-dev/UnityExplorer) **DO NOT U
 * Kicks you if you are not in a modded lobby and you are not in vr!
 * Use the E and R key to move your hands in front of you, automatically presses grip down!
 * Click the Middle Mouse button to do a little emote. You can change the dance this in the silly tab of the GUI
+## License
+This product is not affiliated with Gorilla Tag or Another Axiom LLC and is not endorsed or otherwise sponsored by Another Axiom LLC. Portions of the materials contained herein are property of Another Axiom LLC. ©2021 Another Axiom LLC.
