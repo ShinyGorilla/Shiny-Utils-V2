@@ -1,4 +1,4 @@
-﻿using ExitGames.Client.Photon;
+using ExitGames.Client.Photon;
 using MonkeNotificationLib;
 using Newtonsoft.Json;
 using Photon.Pun;
@@ -6,8 +6,6 @@ using Photon.Realtime;
 using System.Linq;
 using Shiny_Utils_V2.UI;
 using UnityEngine;
-using System.Collections.Generic;
-using Utilla.Models;
 
 namespace Shiny_Utils_V2.Behaviors
 {
