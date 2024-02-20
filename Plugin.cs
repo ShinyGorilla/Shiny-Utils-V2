@@ -1,5 +1,4 @@
 using BepInEx;
-using GorillaFriends;
 using GorillaNetworking;
 using MonkeNotificationLib;
 using Photon.Pun;
@@ -10,6 +9,8 @@ using Shiny_Utils_V2.UI;
 using Cinemachine;
 using System.IO;
 using Shiny_Utils_V2.Patches.GNotPatching;
+using ScoreboardUtils;
+using System.Linq;
 using HarmonyLib;
 
 namespace Shiny_Utils_V2
@@ -28,6 +29,8 @@ namespace Shiny_Utils_V2
         void OnEnable() => HarmonyPatches.ApplyHarmonyPatches();
         void OnDisable() => HarmonyPatches.RemoveHarmonyPatches();
 
+        public static float RpcsCalled;
+
         public float GuiTab = 1f;
         public static float moveAmount = 0.82f;
         public static float moveUp = 0.25f;
@@ -37,27 +40,13 @@ namespace Shiny_Utils_V2
         public static bool XrEnabled = false;
 
         public static string TheRoom;
-        public static string[] VerifiedIDs =
-        {
-            "36B456067A5E1453",
-            "970B338BBDC11A77", //bird
-            "480BF235B17212F",
-            "FBE3EE50747CB892", //luna
-            "4994748F8B361E31", //evelyn
-            "E354E818871BD1D8", //dev
-            "CA8FDFF42B7A1836", //stone
-            "D322FC7F6A9875DB", //decal
-            "F8A85C07F35E787D", //sodah
-            "359E716BF71A54A9", //squid
-            "637F3CE95093F98E", //striker
-            "E249F41EABC2B38E", //Jon the smart boi
-        }; //Not used to track btw
 
         public static Collider handr;
 
         public static GameObject PCCam;
 
         void Update() { if (GorillaTagger.Instance != null) { GoodUpdate(); } }
+
         public static void GoodUpdate()
         {
             ShinyGui.VoiceActive = GorillaComputer.instance.voiceChatOn == "TRUE";
@@ -67,22 +56,6 @@ namespace Shiny_Utils_V2
                 XrEnabled = ControllerInputPoller.instance.leftControllerPosition.ToString() == "(0.0, 0.0, 0.0)";
             }
             UpdateCam();
-
-            //Click
-            if (PCCam != null)
-            {
-                if (Mouse.current.leftButton.wasPressedThisFrame)
-                {
-                    Ray ray = GorillaTagger.Instance.mainCamera.GetComponent<Camera>().ScreenPointToRay(UnityEngine.InputSystem.Pointer.current.position.value);
-                    if (Physics.Raycast(ray, out RaycastHit hit, 5000f))
-                    {
-                        GorillaTagger.Instance.rightHandTriggerCollider.GetComponent<TransformFollow>().enabled = false;
-                        GorillaTagger.Instance.rightHandTriggerCollider.transform.position = hit.point;
-                        GorillaTagger.Instance.rightHandTriggerCollider.GetComponent<TransformFollow>().enabled = true;
-
-                    }
-                }
-            }
 
             //Emotes
             if (Mouse.current.middleButton.isPressed)
@@ -141,6 +114,7 @@ namespace Shiny_Utils_V2
             if (!PhotonNetwork.InRoom && AlreadyDone)
             {
                 NotificationController.AppendMessage("ShinyUtils".WrapColor("green"), "Left room: " + TheRoom.WrapColor("cyan"));
+                RpcsCalled = 0f;
                 AlreadyDone = false;
             }
 
@@ -149,6 +123,16 @@ namespace Shiny_Utils_V2
 
             if (!ShinyGui.GameMode.ToString().Contains("MODDED") && PhotonNetwork.InRoom && !XrEnabled)
                 SExtensions.LeaveRoomReason($"Gamemode was not modded -> Left lobby".WrapColor("danger"));
+
+            if (ShinyGui.FunnySound)
+            {
+                GorillaTagger.Instance.offlineVRRig.PlayHandTapLocal(ShinyGui.Sound, true, 1f);
+                ShinyGui.Sound += 1;
+                if (ShinyGui.Sound > 53)
+                {
+                    ShinyGui.Sound = 40;
+                }
+            }
         }
         public static void FixEmoteType() //Called when changing emote type, fixes emote type being past the limit
         {
@@ -212,6 +196,17 @@ namespace Shiny_Utils_V2
 
             NotificationController.AppendMessage("ShinyUtils".WrapColor("green"), "ShinyUtils loaded");
             Debug.LogError("Please help I am dying inside, I have had no sleep - ShinyGorilla");
+        }
+    }
+
+
+    [HarmonyPatch(typeof(CreditsView), "GetPage")]
+    static class ComputerPatch
+    {
+        static bool Prefix(CreditsView __instance, ref string __result)
+        {
+            __result = $"RPCs in lobby: {Plugin.RpcsCalled}";
+            return false;
         }
     }
 }
