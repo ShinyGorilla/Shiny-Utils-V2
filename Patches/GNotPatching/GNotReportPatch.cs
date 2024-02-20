@@ -1,20 +1,22 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using MonkeNotificationLib;
 using UnityEngine;
+using Photon.Pun;
 using Shiny_Utils_V2.UI;
 
 namespace Shiny_Utils_V2.Patches.GNotPatching
 {
-    [HarmonyPatch(typeof(GorillaNot), "SendReport")]
-    internal class GNotReportPatch
+    [HarmonyPatch(typeof(GorillaNot), "IncrementRPCCallLocal")]
+    internal class GNotRPCPatch
     {
-        static void Postfix(string susReason, string susId, string susNick)
+        static void Postfix(PhotonMessageInfo info, string rpcFunction)
         {
-            if (ShinyGui.GnotNotif)
+            if (ShinyGui.GnotNotif && !rpcFunction.Contains("PlayerHandTap"))
             {
-                NotificationController.AppendMessage("Gorilla Not".WrapColor("danger"), $"Anticheat reported {susNick.ToUpper().WrapColor("cyan")} for \"{susReason.WrapColor("danger")}\" - NOT ALL REPORTS ARE ACCURATE!");
+                NotificationController.AppendMessage("RPC".WrapColor("warning"), $"[{rpcFunction.ToUpper().WrapColor("cyan")}] Called by: {info.Sender.NickName.ToUpper().WrapColor("cyan")}");
             }
-            Debug.Log($"GNot reported {susNick} for {susReason} (ID: {susId})");
+            Debug.Log($"{rpcFunction} called by {info.Sender.NickName} (ID: {info.Sender.UserId})");
+            Plugin.RpcsCalled += 1f;
         }
     }
 }
