@@ -20,22 +20,12 @@ namespace Shiny_Utils_V2.Behaviors
         {
             
             Debug.Log($"Player {newPlayer.UserId} joined with nickname {newPlayer.NickName}");
-
-            if (Plugin.VerifiedIDs.Contains(newPlayer.UserId) && PhotonNetwork.LocalPlayer.UserId == "7FBC02D1E523A769")
-            {
-                NotificationController.AppendMessage("Player Event".WrapColor("warning"), $"Friend {newPlayer.NickName.ToUpper().WrapColor("purple")} has entered the room");
-            }
-            else
-            {
-                NotificationController.AppendMessage("Player Event".WrapColor("warning"), $"{newPlayer.NickName.ToUpper().WrapColor("cyan")} has entered the room");
-            }
+            NotificationController.AppendMessage("Player Event".WrapColor("warning"), $"{newPlayer.NickName.ToUpper().WrapColor("cyan")} has entered the room");
         }
 
         void IInRoomCallbacks.OnPlayerLeftRoom(Player otherPlayer) //Player leave room
         {
             NotificationController.AppendMessage("Player Event".WrapColor("warning"), $"{otherPlayer.NickName.ToUpper().WrapColor("cyan")} has left the room");
-            if (Plugin.VerifiedIDs.Contains(otherPlayer.UserId) && ShinyGui.TFL && PhotonNetwork.LocalPlayer.UserId == "7FBC02D1E523A769")
-                SExtensions.LeaveRoomReason("Disconnect because someone bitch");
         }
 
         void IInRoomCallbacks.OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) //Player prop update
