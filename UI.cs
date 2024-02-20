@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using GorillaNetworking;
 using Photon.Pun;
 using Photon.Realtime;
@@ -20,11 +20,13 @@ namespace Shiny_Utils_V2.UI
         public static object GameMode = "";
         public static float Fov = 80f;
         public static float dancestyle = 1f;
+        public static int Sound = 50;
         public static bool camlerp;
         public static bool TFL;
         public static bool GnotNotif;
         public static bool PropNotifs;
         public static bool VoiceActive;
+        public static bool FunnySound;
         void OnGUI()
         {
             toolbarInt = GUI.Toolbar(new Rect(20, 25, 350, 30), toolbarInt, toolbarStrings);
@@ -140,7 +142,7 @@ namespace Shiny_Utils_V2.UI
 
 
                 case 3: //Silly
-                    if (GUI.Button(new Rect(20f, 65f, 250f, 25f), $"Toggle friend leave ({TFL.ToString().ToUpper()})"))
+                    if (GUI.Button(new Rect(20f, 65f, 250f, 25f), $"Cheeseburger"))
                     {
                         TFL = !TFL;
                         NotificationController.AppendMessage("ShinyGUI".WrapColor("green"), $"[{"Silly".WrapColor("purple")}] Leave on friend disconnect set to {TFL.ToString().ToUpper().WrapColor("cyan")}");
@@ -209,8 +211,12 @@ namespace Shiny_Utils_V2.UI
                         GorillaTagger.Instance.offlineVRRig.PlayHandTapLocal(noiseInt, true, 1f);
                         //Just to clear some things up this is completely client sided so it is not a cheat
                     }
+                    if (GUI.Button(new Rect(20f, 185f, 250f, 25f), "Music"))
+                    {
+                        FunnySound = !FunnySound;
+                    }
                     break;
             }
         }
-    }
+    } //min 40 max 54
 }
